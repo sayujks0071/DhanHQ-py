@@ -1,0 +1,63 @@
+# Core dependencies
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.3.0
+
+# Data and analysis
+yfinance>=0.2.0
+ta-lib>=0.4.0
+plotly>=5.15.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Web framework and API
+fastapi>=0.100.0
+uvicorn>=0.23.0
+websockets>=11.0.0
+requests>=2.31.0
+httpx>=0.24.0
+
+# Database
+sqlalchemy>=2.0.0
+sqlite3
+
+# Configuration and CLI
+pydantic>=2.0.0
+typer>=0.9.0
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# Time and date handling
+pytz>=2023.3
+python-dateutil>=2.8.0
+
+# Logging and monitoring
+structlog>=23.1.0
+rich>=13.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+
+# Development
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+pre-commit>=3.3.0
+
+# Optional: Telegram notifications
+python-telegram-bot>=20.0
+
+# Optional: Advanced plotting
+dash>=2.14.0
+dash-bootstrap-components>=1.4.0
+
+# Optional: Machine learning
+xgboost>=1.7.0
+lightgbm>=4.0.0
+
+# Optional: Time series analysis
+statsmodels>=0.14.0
+arch>=6.2.0

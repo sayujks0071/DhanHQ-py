@@ -1,0 +1,183 @@
+# Liquid F&O Trading System Configuration
+
+# Universe Configuration
+universe:
+  max_instruments: 150
+  min_turnover_30d: 100000000  # 100 Cr
+  min_oi: 1000000  # 10 Lakh
+  max_spread_bps: 5
+  min_lot_value: 100000  # 1 Lakh
+  max_lot_value: 15000000  # 1.5 Cr
+  min_price: 50
+  exclude_stocks: []  # Add problematic stocks here
+
+# Timeframes
+timeframes:
+  futures:
+    - 1m
+    - 5m
+    - 15m
+    - 60m
+    - EOD
+  options:
+    - 5m
+    - EOD
+
+# Transaction Costs (per side)
+costs:
+  futures_bps: 4
+  options_abs: 40  # INR per lot
+  statutory_bps: 0.1
+  stt_bps: 0.05
+  stamp_duty_bps: 0.003
+
+# Slippage
+slippage:
+  futures_bps: 3
+  options_abs: 0.35  # INR per option leg
+
+# Risk Management
+risk:
+  max_daily_dd: 0.02
+  max_per_trade_risk: 0.005
+  max_concurrent_positions: 8
+  margin_buffer_pct: 0.15
+  hedge_min_delta: 0.20
+  
+  # Greek Caps (per underlying)
+  max_delta: 0.8  # lots
+  max_vega: 3.0   # lots equivalent
+  max_gamma: 0.5  # proportional to notional
+  
+  # Portfolio level caps
+  max_portfolio_delta: 5.0
+  max_portfolio_vega: 15.0
+  max_portfolio_gamma: 10.0
+
+# Options Configuration
+options:
+  expiry_days: 7
+  strike_steps: 5
+  min_oi: 1000
+  min_volume: 500
+  iv_smoothing: 0.5
+  roll_time: "14:45"  # IST
+  avoid_last_30min: true
+
+# Market Hours (IST)
+market_hours:
+  pre_open: "09:00"
+  open: "09:15"
+  close: "15:30"
+  timezone: "Asia/Kolkata"
+
+# Event Blackouts
+event_blackouts:
+  - "RBI Policy Meeting"
+  - "Union Budget"
+  - "Major Index Rebalance"
+  - "Earnings Heavyweights"
+  dates:
+    - "2024-02-01"  # Budget
+    - "2024-04-01"  # Financial Year End
+    - "2024-10-01"  # RBI Policy
+
+# Strategy Configuration
+strategies:
+  futures:
+    donchian:
+      enabled: true
+      lookback: 20
+      atr_multiplier: 2.0
+      time_stop_days: 5
+      
+    trend_adx:
+      enabled: true
+      adx_period: 14
+      adx_threshold: 25
+      trend_period: 20
+      
+  options:
+    iron_fly:
+      enabled: true
+      delta_hedge: true
+      iv_rank_min: 0.3
+      wing_size_atr: 1.5
+      
+    iron_condor:
+      enabled: true
+      target_pop: 0.7
+      iv_rank_min: 0.4
+      wing_size_atr: 2.0
+      
+    debit_spread:
+      enabled: true
+      follow_futures: true
+      max_width: 200
+      min_width: 50
+      
+    orb_options:
+      enabled: true
+      breakout_time: "09:30"
+      time_stop_minutes: 120
+      profit_lock_pct: 0.5
+
+# Backtesting
+backtesting:
+  start_date: "2023-01-01"
+  end_date: "2024-01-01"
+  walk_forward_window: 252  # days
+  walk_forward_step: 63    # days
+  initial_capital: 1000000  # 10 Lakh
+  commission_model: "per_trade"
+  
+# Governance
+governance:
+  min_profit_factor: 1.25
+  max_drawdown: 0.12
+  min_sharpe: 1.0
+  min_trades: 250  # for intraday
+  min_weeks: 40    # for weekly strategies
+  min_oos_windows: 2
+  max_param_instability: 0.3
+
+# Dashboard
+dashboard:
+  host: "localhost"
+  port: 8787
+  auth_token: "your_auth_token_here"
+  cors_origins: ["http://localhost:3000", "http://localhost:8787"]
+  
+# Logging
+logging:
+  level: "INFO"
+  file: "logs/trading.log"
+  max_size: "10MB"
+  backup_count: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Database
+database:
+  url: "sqlite:///data/trading.db"
+  echo: false
+  pool_size: 5
+  max_overflow: 10
+  
+# Redis
+redis:
+  url: "redis://localhost:6379/0"
+  max_connections: 10
+  
+# Notifications
+notifications:
+  telegram:
+    enabled: false
+    bot_token: ""
+    chat_id: ""
+  email:
+    enabled: false
+    smtp_server: ""
+    smtp_port: 587
+    username: ""
+    password: ""
+    to_addresses: []

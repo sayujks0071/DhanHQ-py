@@ -1,49 +1,44 @@
-import pathlib
+"""
+Setup script for the F&O trading system.
+"""
+
 from setuptools import setup, find_packages
 
-HERE = pathlib.Path(__file__).parent
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
-VERSION = '2.1.0'
-PACKAGE_NAME = 'dhanhq'
-AUTHOR = 'Dhan'
-AUTHOR_EMAIL = 'dhan-oss@dhan.co'
-URL = 'https://dhanhq.co/'
+with open("requirements.txt", "r", encoding="utf-8") as fh:
+    requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
 
-LICENSE = 'MIT LICENSE'
-DESCRIPTION = 'The official Python client for communicating with the DhanHQ API'
-LONG_DESCRIPTION = (HERE / "README.md").read_text()
-LONG_DESC_TYPE = "text/markdown"
-
-INSTALL_REQUIRES = [
-    "pandas>=1.4.3",
-    "requests>=2.28.1",
-    "websockets>=12.0.1",
-    "pyOpenSSL>=20.0.1",
-    ]
-
-TEST_SUITE="tests"
-TEST_REQUIRES = [
-    "python-dotenv>=1.0.1",
-    "flake8>=7.1.1",
-    "pylint>=3.3.3",
-    "pytest>=8.3.4",
-    "pytest-cov>=6.0.0",
-    "responses>=0.25.3",
-    ]
-
-setup(name=PACKAGE_NAME,
-      version=VERSION,
-      description=DESCRIPTION,
-      long_description=LONG_DESCRIPTION,
-      long_description_content_type=LONG_DESC_TYPE,
-      author=AUTHOR,
-      license=LICENSE,
-      author_email=AUTHOR_EMAIL,
-      url=URL,
-      package_dir={'': 'src'}, # Tells setuptools where your code is
-      packages=find_packages(where='src'), # Automatically find packages
-      install_requires=INSTALL_REQUIRES,
-      extras_require={
-          'dev': TEST_REQUIRES
-      },
-      )
+setup(
+    name="fno-trading-system",
+    version="1.0.0",
+    author="F&O Trading System",
+    author_email="admin@example.com",
+    description="Production-grade Indian F&O algorithmic trading system",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/example/fno-trading-system",
+    packages=find_packages(),
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Financial and Insurance Industry",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Topic :: Office/Business :: Financial :: Investment",
+    ],
+    python_requires=">=3.11",
+    install_requires=requirements,
+    entry_points={
+        "console_scripts": [
+            "fno-trading=src.cli:app",
+        ],
+    },
+    include_package_data=True,
+    package_data={
+        "": ["*.yaml", "*.yml", "*.json", "*.md"],
+    },
+)

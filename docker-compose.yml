@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  trading-system:
+    build: .
+    ports:
+      - "8787:8787"
+    environment:
+      - DHAN_CLIENT_ID=${DHAN_CLIENT_ID}
+      - DHAN_ACCESS_TOKEN=${DHAN_ACCESS_TOKEN}
+      - ENABLE_LIVE=false
+      - ENABLE_OPTIONS=true
+      - DISABLE_EQUITY=true
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./reports:/app/reports
+    depends_on:
+      - redis
+    command: ["python", "-m", "src.cli", "run-paper"]
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  dashboard:
+    build: .
+    ports:
+      - "8788:8787"
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+    command: ["python", "-m", "src.monitoring.server"]
+
+volumes:
+  redis_data:
